@@ -7,7 +7,7 @@ FROM golang:1.24-alpine AS builder
 WORKDIR /app
 
 # Install git and ca-certificates (needed for downloading dependencies)
-RUN apk add --no- Knoten ca-certificates git
+RUN apk add --no-cache ca-certificates git
 
 # Copy dependency definition files first (for Docker layer caching)
 COPY go.mod go.sum ./
