@@ -18,6 +18,7 @@ package main
 
 import (
 	"log"
+	"os"
 
 	"golang-restapi-big-structure/internal/config"
 	"golang-restapi-big-structure/internal/middleware"
@@ -39,7 +40,11 @@ func main() {
 	}
 
 	// Inisialisasi JWT Service
-	jwtSecret := []byte("SECRET_KEY_SUPER_SECRET")
+	jwtSecretStr := os.Getenv("JWT_SECRET")
+	if jwtSecretStr == "" {
+		jwtSecretStr = "SECRET_KEY_SUPER_SECRET"
+	}
+	jwtSecret := []byte(jwtSecretStr)
 	jwtService := jwt.NewJWTService(jwtSecret)
 
 	// Inisialisasi Layer User (Repository -> Service -> Controller)
