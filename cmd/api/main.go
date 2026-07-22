@@ -1,14 +1,35 @@
+// @title           coba-coba API
+// @version         1.0
+// @description     API documentation for coba-coba backend service
+// @termsOfService  http://swagger.io/terms/
+
+// @contact.name   Adib Maros
+// @contact.email  your-email@example.com
+
+// @host      localhost:8080
+// @BasePath  /api/v1
+
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
+// @description Type "Bearer" followed by a space and JWT token.
+
 package main
 
 import (
 	"log"
 
 	"golang-restapi-big-structure/internal/config"
+	"golang-restapi-big-structure/internal/middleware"
 	"golang-restapi-big-structure/internal/modules/product"
 	"golang-restapi-big-structure/internal/modules/user"
 	"golang-restapi-big-structure/internal/pkg/jwt"
 
+	_ "golang-restapi-big-structure/docs" // generated docs package, wajib di-import
+
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func main() {
@@ -23,7 +44,7 @@ func main() {
 
 	// Inisialisasi Layer User (Repository -> Service -> Controller)
 	userRepo := user.NewRepository(db)
-	userService := user.NewService(userRepo)
+	userService := user.NewService(userRepo, jwtService)
 	userController := user.NewController(userService)
 
 	// Inisialisasi Layer Product (Repository -> Service -> Controller)
@@ -33,6 +54,10 @@ func main() {
 
 	// Setup Router Gin
 	r := gin.Default()
+
+	// Pasang Middleware CORS
+	r.Use(middleware.CORSMiddleware())
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	apiGroup := r.Group("/api/v1")
 
 	// Registrasi Routes

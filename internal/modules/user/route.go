@@ -11,6 +11,7 @@ func UserRoutes(rg *gin.RouterGroup, controller *controller, jwtService jwt.Serv
 	users := rg.Group("/users")
 
 	users.POST("/register", controller.RegisterUser)
+	users.POST("/login", controller.LoginUser)
 
 	protected := users.Group("/")
 	protected.Use(middleware.AuthMiddleware(jwtService))

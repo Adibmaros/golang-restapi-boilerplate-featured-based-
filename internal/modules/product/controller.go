@@ -17,6 +17,14 @@ func NewController(service Service) *controller {
 	}
 }
 
+// GetAllProducts godoc
+// @Summary      Get all products
+// @Description  Get a list of all products with creator details
+// @Tags         products
+// @Produce      json
+// @Success      200  {object}  map[string]interface{}
+// @Failure      500  {object}  map[string]interface{}
+// @Router       /products/ [get]
 func (h *controller) GetAllProducts(c *gin.Context) {
 	products, err := h.service.GetAllProducts()
 	if err != nil {
@@ -32,6 +40,16 @@ func (h *controller) GetAllProducts(c *gin.Context) {
 	})
 }
 
+// GetProductByID godoc
+// @Summary      Get product by ID
+// @Description  Get details of a specific product by its ID
+// @Tags         products
+// @Produce      json
+// @Param        id   path      int  true  "Product ID"
+// @Success      200  {object}  map[string]interface{}
+// @Failure      400  {object}  map[string]interface{}
+// @Failure      404  {object}  map[string]interface{}
+// @Router       /products/{id} [get]
 func (h *controller) GetProductByID(c *gin.Context) {
 	idParam := c.Param("id")
 	id, err := strconv.ParseUint(idParam, 10, 32)
@@ -56,6 +74,19 @@ func (h *controller) GetProductByID(c *gin.Context) {
 	})
 }
 
+// CreateProduct godoc
+// @Summary      Create a new product
+// @Description  Create a new product attached to the currently authenticated user
+// @Tags         products
+// @Accept       json
+// @Produce      json
+// @Security     BearerAuth
+// @Param        request  body      CreateProductDTO        true  "Create Product Payload"
+// @Success      201      {object}  map[string]interface{}
+// @Failure      400      {object}  map[string]interface{}
+// @Failure      401      {object}  map[string]interface{}
+// @Failure      500      {object}  map[string]interface{}
+// @Router       /products/ [post]
 func (h *controller) CreateProduct(c *gin.Context) {
 	userId, exist := c.Get("user_id")
 	if !exist {

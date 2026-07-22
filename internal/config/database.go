@@ -10,7 +10,7 @@ import (
 
 func ConnectDB() (*gorm.DB, error) {
 
-	dsn := "root:@(127.0.0.1:3306)/golang_restapi_big_structure?charset=utf8mb4&Loc=local&parseTime=true"
+	dsn := "root:@(127.0.0.1:3306)/golang_restapi_big_structure?charset=utf8mb4&loc=Local&parseTime=true"
 
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
